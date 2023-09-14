@@ -1,0 +1,54 @@
+{% extends "core/base.html" %}
+{% block title %}Browse{% endblock title %}
+{% block content %}
+    <div class='pb-6 grid grid-cols-4 gap-4 bg-gray-100'>
+        <div class='col-span-1'>
+            <form method='get' action={% url "item:browse" %}>
+                <input name='query' class='w-full px-6 py-4 border rounded-xl' type='text' value="{{query}}" placeholder='Search for something'>
+                <button class='mt-2 py-4 px-8 tetxt-lg bg-teal-500 text-white rounded-xl'>Search</button>
+            </form>
+
+            <hr class='my-6'>
+            <p class='font-bold'>Max Price</p>
+            <form method='get' action={% url "item:browse" %}>
+                <input name='price' class='w-full px-6 py-4 border rounded-xl' type='number' value="{{price}}" step=0.1 placeholder='Max price'>
+                <button class='mt-2 py-4 px-8 tetxt-lg bg-teal-500 text-white rounded-xl'>Search</button>
+            </form>
+
+            <hr class='my-6'>
+            <p class='font-bold'>Category</p>
+
+            <ul>
+                {% for category in categories %}
+                    <li class='px-2 py-2 rounded-xl {% if category.id == category_id %}bg-gray-200{% endif %}'>
+                        <a href="{% url "item:browse" %}?query={{ query }}&price={{ price }}&category={{ category.id }}">{{ category.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+
+            <hr class='my-6'>
+            <p class='font-bold'>Clear filters</p>
+
+            <ul>
+                <li><a href={% url "item:browse" %} class='mt-2 py-4 px-8 inline-block bg-yellow-500 text-lg rounded-xl text-white'>Clear Filters</a></li>
+            </ul>
+        </div>
+        <div class='col-span-3'>
+            <div class='grid grid-cols-3 gap-3'>
+                {% for item in items %}
+                    <div>
+                        <a href={% url 'item:detail' item.id %}>
+                            <div>
+                                <img src={{item.image.url}} class='rounded-t mx-auto'>
+                            </div>
+                            <div class='p-6 bg-white rounded-b'>
+                                <h2 class='text-xl'>{{item.name}}</h2>
+                                <p class='text-gray'>Price: ${{item.price}}</p>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock content %}
